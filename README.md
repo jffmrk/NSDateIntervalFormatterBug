@@ -7,6 +7,10 @@ Demonstrates a bug with the NSDateIntervalFormatter
 
 Code:
 ```
+// Setup dates
+let now = NSDate()
+let next = NSDate(timeInterval: 14400)
+
 // This formats 24-hr preferences correctly
 let dateFormatter = NSDateFormatter()
 dateFormatter.dateStyle = .MediumStyle
@@ -25,3 +29,6 @@ self.dateIntervalLabel.text = strInterval
 Screenshot:
 
 ![ScreenShot](screen.png)
+
+
+Reported to https://bugreport.apple.com and also logged at http://www.openradar.me/24639743
