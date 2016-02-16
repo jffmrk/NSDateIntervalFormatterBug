@@ -18,21 +18,29 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didEnterBackground", name: UIApplicationDidEnterBackgroundNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didBecomeActive", name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NSLog("ViewDidLoad")
         self.didBecomeActive()
     }
 
     func didBecomeActive() {
-        self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "updateLabels", userInfo: nil, repeats: true)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didEnterBackground", name: UIApplicationDidEnterBackgroundNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidBecomeActiveNotification, object: nil)
+
+        if (self.timer == nil) {
+            self.timer = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: "updateLabels", userInfo: nil, repeats: true)
+        }
     }
 
     func didEnterBackground() {
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "didBecomeActive", name: UIApplicationDidBecomeActiveNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIApplicationDidEnterBackgroundNotification, object: nil)
+
         self.timer?.invalidate()
         self.timer = nil
     }
 
     @IBAction func toggleTimer() {
+
         if let timer = self.timer {
             timer.invalidate()
             self.timer = nil
